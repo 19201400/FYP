@@ -1,0 +1,53 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block SearchBar %}
+   				<br><center><h3>Here you can search for the music!</h3> 
+   					<form method="POST">
+   						{% csrf_token %} 
+  							<input name="artist" placeholder="Artist Name..." aria-label="Search">
+  								<i class="fas fa-search" aria-hidden="true"></i>
+					</form></center><br><hr>
+{% endblock SearchBar %}
+
+{% block content %}
+
+      {% if db_results %}
+      <div class="row">
+          {% for x in db_results %}
+          <div class="col-sm-4">
+            <div class="box-element music">
+              <img src="{{x.Song_image}}" width="250px", height="250px"><hr>
+              <h3><strong>{{x.Song_name}}</strong></h3>
+              <h5>{{x.artist_name}}</h5>
+              <a href="{{x.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></a>
+                <a href ="{% url 'music_profile' x.id %}"><button class="btn btn-outline-info">Left Comments</button></a>
+            </div>
+            <br>
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+{% endblock content %}
+
+
+
+<!--     {% if results %}
+    <div class="container">
+    	<div class="row">
+    	{% for x in results %}
+    	
+    		<div class="col">
+    			<ol class="list-group mt-1">
+      				<li class="list-group-item bg-info text-center"><h3 class="text-white" >{{x.name}}</h3></li>
+     				<li class="list-group-item" ><a href='{{x.preview_url}}'><button type="button" class="btn btn-success btn-lg mt-1">PLAY SONG</button></a></li>
+      				<li class="list-group-item"><img src="{{x.album.images.0.url}}" class="img-fluid img-thumbnail" alt=""></li>
+    			</ol>
+			</div><hr>
+    	{% endfor %}
+    	</div>
+    </div>
+    {% endif %} -->
+
+
+ 

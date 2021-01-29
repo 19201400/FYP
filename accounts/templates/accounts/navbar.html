@@ -1,0 +1,18 @@
+<nav>
+      <div class="logo">
+		Welcome, {{request.user}} 
+	 </div>
+	<input type="checkbox" id="click">
+      <label for="click" class="menu-btn">
+        <i class="fas fa-bars"></i>
+      </label>
+      <ul>
+      	{% if request.user.is_staff %}
+      	<li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+      	{% endif %}
+		<li><a href="{% url 'music' %}">Music</a></li>
+		<li><a href="{% url 'recommendation' %}">Recommendation</a></li>
+		<li><a href="{% url 'records' %}">Records</a></li>
+		<li><a href="{% url 'logout' %}">Logout</a></li>
+	  </ul>
+</nav>

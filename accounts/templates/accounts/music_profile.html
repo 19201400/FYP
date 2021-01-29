@@ -1,0 +1,94 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+<br>
+<div class="container-fluid">
+	
+	<div class="row">
+		<div class="col-md-6">
+			<img src="{{song.Song_image}}">
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-striped table-hover">
+						<tbody>
+							<h3>Songs Information:</h3>
+							
+							<tr>
+								<td>Song ID: </td>
+								<td>{{song.id}}</td>
+							</tr>
+
+							<tr>
+								<td>Artist Name: </td>
+								<td>{{song.artist_name}}</td>
+							</tr>
+								
+							<tr>
+								<td>Song Name: </td>
+								<td>{{song.Song_name}}</td>
+							</tr>
+
+							<tr>
+								<td>Album Name: </td>
+								<td>{{song.album_name}}</td>
+							</tr>
+
+							<tr>
+								<td>Track Number: </td>
+								<td>{{song.track_number}}</td>
+							</tr>
+
+							<tr>
+								<td>Release Date: </td>
+								<td>{{song.release_date}}</td>
+							</tr>
+
+							<tr>
+								<td>Popularity: </td>
+								<td>{{song.popularity}}</td>
+							</tr>
+
+							<tr>
+								<td><a href="{{song.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group green-border-focus">
+  						<h4><label>Leave the comments you like...</label></h4>
+  						<form method="POST">
+  							{% csrf_token %} 
+  							<textarea class="form-control" name="song_comments" rows="7"></textarea><br>
+  							<button type="submit" value="submit" class="btn btn-outline-success">Submit</button>
+  						</form>
+  						<br>
+  						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

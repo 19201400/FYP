@@ -1,0 +1,100 @@
+{% extends 'accounts/main.html' %}
+
+   {% block content %}
+<br>
+<br>
+<br>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center">
+			  	<div class="card-header">
+			  		<h4 class="card-title">Total Users</h4>
+			  	</div>
+			  	<div class="card-body">
+			    	<h1 class="card-title">{{total_users}}</h1>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center">
+			  	<div class="card-header">
+			  		<h4 class="card-title">Total Submitted Comments</h4>
+			  	</div>
+			  	<div class="card-body">
+			    	<h1 class="card-title">{{total_comments}}</h1>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br>
+<br>
+<br>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center">
+			  	<div class="card-header">
+			  		<h3 class="card-title">Users Information: </h3>
+			  	</div>
+			  	<div class="card-body">
+			    	<table class="table table-sm table-striped table-hover">
+						<tr>
+							<th>Users ID: </th>
+							<th>Username: </th>
+							<th>Last Login: (Date/Time)</th>
+						</tr>
+						{% for user in users %}
+						
+						<tr>
+
+							<td>{{user.id}}</td>
+							<td>{{user.username}}</td>
+							<td>{{user.last_login}}</td>
+						</tr>
+						{% endfor %}
+
+					</table>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center">
+			  	<div class="card-header">
+			  		<h3 class="card-title">Users Sentiment Results: </h3>
+			  	</div>
+			  	<div class="card-body">
+			    	<table class="table table-sm table-striped table-hover">
+						<tr>
+							<th>Username: </th>
+							<th>Sentiment Results: </th>
+							<th>Song Name: </th>
+							<th>Artist Name: </th>
+						</tr>
+						{% for comment in comments %}
+						<tr>
+
+							<td>{{comment.usr}}</td>
+							<td>{{comment.sentiment_result}}</td>
+							<td>{{comment.song.Song_name}}</td>
+							<td>{{comment.song.artist_name}}</td>
+						</tr>
+						{% endfor %}
+
+					</table>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+   {% endblock %}
+
+
