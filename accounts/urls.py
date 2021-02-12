@@ -26,4 +26,8 @@ urlpatterns = [
 
     path('404/', views.notificationPage, name = "404"),
 
+    path('positive/', views.positivePage, name = "positive"),
+    path('neutral/', views.neutralPage, name = "neutral"),
+    path('nagative/', views.nagativePage, name = "nagative"),
+
 ]

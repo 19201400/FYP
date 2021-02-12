@@ -12,8 +12,27 @@
 {% block content %}
 
       {% if db_results %}
+      db_results
       <div class="row">
           {% for x in db_results %}
+          <div class="col-sm-4">
+            <div class="box-element music">
+              <img src="{{x.Song_image}}" width="250px", height="250px"><hr>
+              <h3><strong>{{x.Song_name}}</strong></h3>
+              <h5>{{x.artist_name}}</h5>
+              <a href="{{x.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></a>
+                <a href ="{% url 'music_profile' x.id %}"><button class="btn btn-outline-info">Left Comments</button></a>
+            </div>
+            <br>
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+     {% if filter_results %}
+     filter_results
+      <div class="row">
+          {% for x in filter_results %}
           <div class="col-sm-4">
             <div class="box-element music">
               <img src="{{x.Song_image}}" width="250px", height="250px"><hr>

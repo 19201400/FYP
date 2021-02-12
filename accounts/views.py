@@ -121,22 +121,24 @@ def musicPage(request):
 			albumName = x["album"]["name"]
 			trackNumber = str(x["track_number"])
 			releaseDate = x["album"]["release_date"]
-			popularity = str(x["popularity"])
+			popularity = x["popularity"]
 			songID = str(x["id"])
 
 			SongImage = x["album"]["images"][0]["url"]
 			songPreview = str(x["preview_url"])
 
 			# Save songs information to Django database from Spotify...
-			#store_obj = Songs(artist_name = artistName, Song_name = songName, album_name = albumName, track_number = trackNumber, release_date = releaseDate, popularity = popularity, songs_id = songID, Song_image = SongImage, Song_preview = songPreview)
-			#store_obj.save()	
+			store_obj = Songs(artist_name = artistName, Song_name = songName, album_name = albumName, track_number = trackNumber, release_date = releaseDate, popularity = popularity, songs_id = songID, Song_image = SongImage, Song_preview = songPreview)
+			store_obj.save()	
 
 		songs = Songs.objects.filter(Q(artist_name__contains=artist) | Q(Song_name__contains=artist) | Q(album_name__contains=artist))
 		
 		return render(request, 'accounts/music.html', {'db_results':songs})
 
 	else:
-		return render(request, 'accounts/music.html')
+		default_songs = Songs.objects.filter(popularity__gte=70)
+
+		return render(request, 'accounts/music.html', {'filter_results':default_songs})
 
 @login_required(login_url='login')
 def music_profilePage(request, song_id):
@@ -145,7 +147,7 @@ def music_profilePage(request, song_id):
 	context = {'song':song}
 
 	if request.method=='POST':
-		result = ""
+		sentiment_result = ""
 
 		song_Comments = request.POST.get('song_comments')
 
@@ -159,21 +161,25 @@ def music_profilePage(request, song_id):
 		print("Polarity = " + str(polarity), "Subjectivity = " + str(subjectivity))
 
 		if polarity < 0:
-			result = "Negative"
-			print(result)
-			#print("Thanks for the feedback\nYour Mood is NEGATIVE!")
+			sentiment_result = "Negative"
+			print(sentiment_result)
+			#return render(request, 'accounts/negative.html')
+			
 		elif polarity == 0:
-			result = "Neutral"
-			print(result)
-			#print("Thanks for the feedback\nYour Mood is NEUTRAL!")
+			sentiment_result = "Neutral"
+			print(sentiment_result)
+			#return render(request, 'accounts/neutral.html')
+			
 		elif polarity > 0:
-			result = "Postive"
-			print(result)
-			#print("Thanks for the feedback\nYour Mood is POSTIVE!")
+			sentiment_result = "Postive"
+			print(sentiment_result)
+			#return render(request, 'accounts/positive.html')
+			
 
 		# Save the users comments with sentiment records to db...
-		store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
+		store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
 		store_comments_obj.save()
+
 
 	return render(request, 'accounts/music_profile.html', context)
 
@@ -193,6 +199,20 @@ def recordsPage(request):
 def notificationPage(request):
 	return render(request, 'accounts/404.html')
 
+
+@login_required(login_url='login')
+def positivePage(request):
+	return render(request, 'accounts/positive.html')
+
+
+@login_required(login_url='login')
+def neutralPage(request):
+	return render(request, 'accounts/neutral.html')
+
+
+@login_required(login_url='login')
+def nagativePage(request):
+	return render(request, 'accounts/nagative.html')
 
 
 
