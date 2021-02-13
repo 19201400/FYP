@@ -144,7 +144,8 @@ def musicPage(request):
 def music_profilePage(request, song_id):
 
 	song = Songs.objects.get(id=song_id)
-	context = {'song':song}
+	comments = Sentiment_Records.objects.filter(song__exact=song)
+	context = {'song':song, 'comments':comments}
 
 	if request.method=='POST':
 		sentiment_result = ""
