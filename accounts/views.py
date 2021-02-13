@@ -194,7 +194,15 @@ def RecommendationPage(request):
 
 @login_required(login_url='login')
 def recordsPage(request):
-	return render(request, 'accounts/records.html')
+
+	positive_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Postive") & Q(usr__exact=request.user)).count()
+	negative_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Negative") & Q(usr__exact=request.user)).count()
+	neutral_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Neutral") & Q(usr__exact=request.user)).count()
+
+	specific_comments = Sentiment_Records.objects.filter(usr__exact=request.user)
+
+	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments}
+	return render(request, 'accounts/records.html', context)
 
 @login_required(login_url='login')
 def notificationPage(request):

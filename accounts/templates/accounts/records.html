@@ -1,19 +1,80 @@
 {% extends 'accounts/main.html' %}
 
    {% block content %}
-
+					<br>
+					<br>
    <div class="row">
 		<div class="col-md-12">
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-4">
+					<div class="card text-center">
+					  	<div class="card-header">
+					  		<h4 class="card-title">Total Positive Comments</h4>
+					  	</div>
+					  	<div class="card-body">
+					    	<h1 class="card-title">{{positive_count}}</h1>
+					  	</div>
+					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-4">
+					<div class="card text-center">
+					  	<div class="card-header">
+					  		<h4 class="card-title">Total Negative Comments</h4>
+					  	</div>
+					  	<div class="card-body">
+					    	<h1 class="card-title">{{negative_count}}</h1>
+					  	</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card text-center">
+					  	<div class="card-header">
+					  		<h4 class="card-title">Total Neutral Comments</h4>
+					  	</div>
+					  	<div class="card-body">
+					    	<h1 class="card-title">{{neutral_count}}</h1>
+					  	</div>
+					</div>
 				</div>
 			</div>
+					<br>
+					<br>
 			<div class="row">
-				<div class="col-md-6">
-				</div>
-				<div class="col-md-6">
+				<div class="col-md-12">
+					<div class="card text-center">
+					  	<div class="card-header">
+					  		<h4 class="card-title">Commented History: </h4>
+					  	</div>
+					  	<div class="card-body">
+							 <table class="table table-sm table-striped table-hover">
+								<tr>
+									<th>Artist Name: </th>
+									<th>Song Name: </th>
+									<th>Song Comments: </th>
+									<th>Sentiment Result: </th>
+									<th>Sentiment Polarity: </th>
+									<th>Sentiment Subjectivity: </th>
+									<th>Create Date: (Date/Time) </th>
+									
+									
+								</tr>
+								{% for x in specific_comments %}
+								
+								<tr>
+									<td>{{x.song.artist_name}}</td>
+									<td><a href ="{% url 'music_profile' x.song.id %}">{{x.song.Song_name}}</a></td>
+									<td>{{x.song_comments}}</td>
+									<td>{{x.sentiment_result}}</td>
+									<td>{{x.sentiment_polarity}}</td>
+									<td>{{x.sentiment_subjectivity}}</td>
+									<td>{{x.date_created}}</td>
+									
+								</tr>
+								{% endfor %}
+
+							</table>
+					  	</div>
+					</div>
 				</div>
 			</div>
 		</div>
