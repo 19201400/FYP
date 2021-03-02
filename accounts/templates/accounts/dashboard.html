@@ -84,7 +84,7 @@
 
 							<td>{{comment.usr}}</td>
 							<td>{{comment.sentiment_result}}</td>
-							<td>{{comment.song.Song_name}}</td>
+							<td><a href ="{% url 'music_profile' comment.song.id %}">{{comment.song.Song_name}}</a></td>
 							<td>{{comment.song.artist_name}}</td>
 						</tr>
 						{% endfor %}

@@ -12,7 +12,7 @@
 					  		<h4 class="card-title">Total Positive Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title">{{positive_count}}</h1>
+					    	<h1 class="card-title"><font color="green">{{positive_count}}</font></h1>
 					  	</div>
 					</div>
 				</div>
@@ -22,7 +22,7 @@
 					  		<h4 class="card-title">Total Negative Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title">{{negative_count}}</h1>
+					    	<h1 class="card-title"><font color="red">{{negative_count}}</font></h1>
 					  	</div>
 					</div>
 				</div>
@@ -32,7 +32,7 @@
 					  		<h4 class="card-title">Total Neutral Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title">{{neutral_count}}</h1>
+					    	<h1 class="card-title"><font color="orange">{{neutral_count}}</font></h1>
 					  	</div>
 					</div>
 				</div>
@@ -40,6 +40,20 @@
 					<br>
 					<br>
 			<div class="row">
+				<div class="col-md-12">
+					<div class="card text-center">
+						<div class="card-header">
+							<h4 class="card-title">Filtering: </h4>
+						</div>
+						<div class="card-body">
+							<form method="get">
+								{{comment_filters.form}}
+								<button class="btn btn-primary" type="submit">Search</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<p><p>
 				<div class="col-md-12">
 					<div class="card text-center">
 					  	<div class="card-header">
@@ -52,8 +66,8 @@
 									<th>Song Name: </th>
 									<th>Song Comments: </th>
 									<th>Sentiment Result: </th>
-									<th>Sentiment Polarity: </th>
-									<th>Sentiment Subjectivity: </th>
+									<!-- <th>Sentiment Polarity: </th>
+									<th>Sentiment Subjectivity: </th> -->
 									<th>Create Date: (Date/Time) </th>
 									
 									
@@ -65,8 +79,8 @@
 									<td><a href ="{% url 'music_profile' x.song.id %}">{{x.song.Song_name}}</a></td>
 									<td>{{x.song_comments}}</td>
 									<td>{{x.sentiment_result}}</td>
-									<td>{{x.sentiment_polarity}}</td>
-									<td>{{x.sentiment_subjectivity}}</td>
+									<!-- <td>{{x.sentiment_polarity}}</td>
+									<td>{{x.sentiment_subjectivity}}</td> -->
 									<td>{{x.date_created}}</td>
 									
 								</tr>

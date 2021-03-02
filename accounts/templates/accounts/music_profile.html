@@ -68,7 +68,7 @@
   						<h4><label>Leave the comments you like...</label></h4>
   						<form method="POST">
   							{% csrf_token %} 
-  							<textarea class="form-control" name="song_comments" rows="7"></textarea><br>
+  							<textarea class="form-control" name="song_comments" rows="7" required></textarea><br>
   							<button type="submit" value="submit" class="btn btn-outline-success">Submit</button>
   						</form>
   						<br>

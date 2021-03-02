@@ -8,10 +8,14 @@ from django.contrib.auth.models import *
 
 from django.contrib import messages
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from accounts.models import *
 from django.db.models import Q
 
 from .decorators import unauthenticated_user, allowed_users, admin_only
+from .filters import commentsFilters
+
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -132,13 +136,26 @@ def musicPage(request):
 			store_obj.save()	
 
 		songs = Songs.objects.filter(Q(artist_name__contains=artist) | Q(Song_name__contains=artist) | Q(album_name__contains=artist))
-		
+
 		return render(request, 'accounts/music.html', {'db_results':songs})
 
 	else:
 		default_songs = Songs.objects.filter(popularity__gte=70)
 
-		return render(request, 'accounts/music.html', {'filter_results':default_songs})
+		paginator = Paginator(default_songs, 6)
+
+		page = request.GET.get('page')
+
+		try:
+			songs = paginator.page(page)
+
+		except PageNotAnInteger:
+			songs = paginator.page(1)
+
+		except EmptyPage:
+			songs = paginator.page(paginator.num_pages)
+
+		return render(request, 'accounts/music.html', {'filter_results':songs})
 
 @login_required(login_url='login')
 def music_profilePage(request, song_id):
@@ -199,9 +216,14 @@ def recordsPage(request):
 	negative_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Negative") & Q(usr__exact=request.user)).count()
 	neutral_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Neutral") & Q(usr__exact=request.user)).count()
 
+	
+
 	specific_comments = Sentiment_Records.objects.filter(usr__exact=request.user)
 
-	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments}
+	comment_filters = commentsFilters(request.GET, queryset=specific_comments)
+	specific_comments = comment_filters.qs
+
+	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments, 'comment_filters':comment_filters}
 	return render(request, 'accounts/records.html', context)
 
 @login_required(login_url='login')
