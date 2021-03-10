@@ -16,6 +16,10 @@ class Songs(models.Model):
     Song_image = models.TextField(max_length=500)
     Song_preview = models.TextField(max_length=500)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    likes = models.ManyToManyField(User, related_name='songs_post')
+
+    def total_likes(self):
+        return self.likes.count()
 
 
 class Sentiment_Records(models.Model):

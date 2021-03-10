@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+
+from django.urls import reverse
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -24,6 +26,12 @@ from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
 
+
+
+def LikeView(request, pk):
+	s = get_object_or_404(Songs, id=request.POST.get('song.id'))
+	s.likes.add(request.user)
+	return HttpResponseRedirect(reverse('music_profile', args=[str(pk)]))
 
 # Try to restrict the user go to index page whithout logged in...
 @login_required(login_url='login')
@@ -116,7 +124,7 @@ def musicPage(request):
 		artist_uri = result['tracks']['items'][0]['artists'][0]['uri']
 		# Get top ten songs for the specific artist...
 		results = spotify.artist_top_tracks(artist_uri)
-		final_result=results['tracks'][:10]
+		final_result=results['tracks'][:1]
 
 		# Loop the tracks information from Spotify...
 		for x in final_result:
@@ -130,6 +138,9 @@ def musicPage(request):
 
 			SongImage = x["album"]["images"][0]["url"]
 			songPreview = str(x["preview_url"])
+
+			
+			# check_duplicate = Songs.objects.values_list('songs_id')
 
 			# Save songs information to Django database from Spotify...
 			store_obj = Songs(artist_name = artistName, Song_name = songName, album_name = albumName, track_number = trackNumber, release_date = releaseDate, popularity = popularity, songs_id = songID, Song_image = SongImage, Song_preview = songPreview)
@@ -162,7 +173,12 @@ def music_profilePage(request, song_id):
 
 	song = Songs.objects.get(id=song_id)
 	comments = Sentiment_Records.objects.filter(song__exact=song)
-	context = {'song':song, 'comments':comments}
+
+	# Get the total likes on the specific song
+	stuff = get_object_or_404(Songs, id=song_id)
+	total_likes = stuff.total_likes()
+
+	context = {'song':song, 'comments':comments, 'total_likes':total_likes}
 
 	if request.method=='POST':
 		sentiment_result = ""
@@ -181,23 +197,30 @@ def music_profilePage(request, song_id):
 		if polarity < 0:
 			sentiment_result = "Negative"
 			print(sentiment_result)
-			#return render(request, 'accounts/negative.html')
+
+			# Save the users comments with sentiment records to db...
+			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
+			store_comments_obj.save()
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='red'>NEGATIVE!</font></h1></center>")
 			
 		elif polarity == 0:
 			sentiment_result = "Neutral"
 			print(sentiment_result)
-			#return render(request, 'accounts/neutral.html')
+
+			# Save the users comments with sentiment records to db...
+			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
+			store_comments_obj.save()
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='orange'>NEUTRAL!</font></h1></center>")
 			
 		elif polarity > 0:
 			sentiment_result = "Postive"
 			print(sentiment_result)
-			#return render(request, 'accounts/positive.html')
+
+			# Save the users comments with sentiment records to db...
+			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
+			store_comments_obj.save()
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='green'>POSITIVE!</font></h1></center>")
 			
-
-		# Save the users comments with sentiment records to db...
-		store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
-		store_comments_obj.save()
-
 
 	return render(request, 'accounts/music_profile.html', context)
 

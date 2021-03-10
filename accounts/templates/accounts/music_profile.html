@@ -1,4 +1,5 @@
 {% extends 'accounts/main.html' %}
+{% block title %} Music Details {% endblock title %}
 {% load static %}
 
 
@@ -52,10 +53,19 @@
 							<tr>
 								<td>Popularity: </td>
 								<td>{{song.popularity}}</td>
+								
 							</tr>
 
 							<tr>
+									<td>
+									<form action="{% url 'like_post' song.pk %}" method="POST">
+										{% csrf_token %}
+										<button type="submit" name="song.id" value="{{ song.id }}" class="btn btn-outline-primary">Like</button> - {{ total_likes }} Likes
+									</form>
+								</td>
+
 								<td><a href="{{song.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></td>
+							
 							</tr>
 
 						</tbody>
@@ -65,11 +75,11 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group green-border-focus">
-  						<h4><label>Leave the comments you like...</label></h4>
+  						<h4><label>Comments Area...</label></h4>
   						<form method="POST">
   							{% csrf_token %} 
-  							<textarea class="form-control" name="song_comments" rows="7" required></textarea><br>
-  							<button type="submit" value="submit" class="btn btn-outline-success">Submit</button>
+  							<textarea class="form-control" name="song_comments" rows="5" required></textarea><br>
+  							<button type="submit" value="submit" class="btn btn-outline-success">Submit</button> 
   						</form>
   						<br>
   						<br>
@@ -85,10 +95,10 @@
 
 							 	{% for x in comments %}
 							 	<strong>
-							 		{{x.usr}} - 
-							      	
-							      	Posted on: {{x.date_created}}
+							 		<u>{{x.usr}}</u> -
 							    </strong>
+							      	Posted on: {{x.date_created}}
+							    
 							    <br>
 							      	{{x.song_comments}}
 							    <br>
