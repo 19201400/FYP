@@ -60,7 +60,11 @@
 									<td>
 									<form action="{% url 'like_post' song.pk %}" method="POST">
 										{% csrf_token %}
-										<button type="submit" name="song.id" value="{{ song.id }}" class="btn btn-outline-primary">Like</button> - {{ total_likes }} Likes
+										{% if liked %}
+											<button type="submit" name="song.id" value="{{ song.id }}" class="btn btn-outline-danger">Unlike</button> - {{ total_likes }} Likes
+										{% else %}
+											<button type="submit" name="song.id" value="{{ song.id }}" class="btn btn-outline-primary">Like</button> - {{ total_likes }} Likes
+										{% endif %}
 									</form>
 								</td>
 

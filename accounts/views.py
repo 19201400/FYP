@@ -30,7 +30,13 @@ import nltk
 
 def LikeView(request, pk):
 	s = get_object_or_404(Songs, id=request.POST.get('song.id'))
-	s.likes.add(request.user)
+	liked = False 
+	if s.likes.filter(id=request.user.id).exists():
+		s.likes.remove(request.user)
+		liked = False
+	else:
+		s.likes.add(request.user)
+		liked = True
 	return HttpResponseRedirect(reverse('music_profile', args=[str(pk)]))
 
 # Try to restrict the user go to index page whithout logged in...
@@ -178,7 +184,11 @@ def music_profilePage(request, song_id):
 	stuff = get_object_or_404(Songs, id=song_id)
 	total_likes = stuff.total_likes()
 
-	context = {'song':song, 'comments':comments, 'total_likes':total_likes}
+	liked = False
+	if stuff.likes.filter(id=request.user.id).exists():
+		liked = True
+
+	context = {'song':song, 'comments':comments, 'total_likes':total_likes, 'liked':liked}
 
 	if request.method=='POST':
 		sentiment_result = ""
