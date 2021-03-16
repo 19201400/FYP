@@ -179,7 +179,7 @@ def musicPage(request):
 		artist_uri = result['tracks']['items'][0]['artists'][0]['uri']
 		# Get top ten songs for the specific artist...
 		results = spotify.artist_top_tracks(artist_uri)
-		final_result=results['tracks'][:1]
+		final_result=results['tracks'][:10]
 
 		# Loop the tracks information from Spotify...
 		for x in final_result:
@@ -310,11 +310,13 @@ def music_profilePage(request, song_id):
 @login_required(login_url='login')
 def RecommendationPage(request):
 
-	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))
+	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))[:8]
 
-	just_updated_song = Songs.objects.filter(release_date__icontains="2021")
+	just_updated_song = Songs.objects.filter(Q(release_date__icontains="2021") | Q(release_date__icontains="2020"))[:8]
+
+	sounds_of_7080s = Songs.objects.filter(Q(release_date__icontains="197") | Q(release_date__icontains="198"))[:8]
  
-	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song}
+	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song, 'sounds_of_7080s':sounds_of_7080s}
 
 	return render(request, 'accounts/recommendation.html', context)
 

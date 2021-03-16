@@ -5,7 +5,7 @@
           <br><center><h3>Search the Artist here! For 10 latest songs!</h3> 
             <form method="POST">
               {% csrf_token %} 
-                <input name="artist" placeholder="Artist Name..." aria-label="Search">
+                <input name="artist" placeholder="Artist Name..." aria-label="Search" required>
                   <i class="fas fa-search" aria-hidden="true"></i>
           </form></center><br>
               {% if cat %}

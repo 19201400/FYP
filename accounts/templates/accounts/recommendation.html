@@ -12,12 +12,42 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card-header">
-					  	<h4 class="card-title">Just Updated</h4>
+					  	<h4 class="card-title">New Music</h4>
 					</div>
 					<div class="card-body">
 					  		{% if just_updated_song %}
 					  			<div class="row">
 					  				{% for x in just_updated_song %}
+										<div class="col-sm-3">
+						            		<div class="box-element music">
+						              			<a href ="{% url 'music_profile' x.id %}"><img src="{{x.Song_image}}" width="250px", height="250px"></a>
+						              			<h3><strong>{{x.Song_name}}</strong></h3>
+						              			<h5>{{x.artist_name}}</h5>
+						            		</div>
+						            			<br>
+						          		</div>
+						          	{% endfor %}
+						      	</div>
+						    {% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<br>
+<br>
+<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card-header">
+					  	<h4 class="card-title">Sounds of the '70s - '80s</h4>
+					</div>
+					<div class="card-body">
+					  		{% if sounds_of_7080s %}
+					  			<div class="row">
+					  				{% for x in sounds_of_7080s %}
 										<div class="col-sm-3">
 						            		<div class="box-element music">
 						              			<a href ="{% url 'music_profile' x.id %}"><img src="{{x.Song_image}}" width="250px", height="250px"></a>
