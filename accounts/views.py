@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.urls import reverse
+from django.urls import reverse 
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -28,6 +28,15 @@ import nltk
 
 
 
+
+
+
+
+
+
+
+
+
 def LikeView(request, pk):
 	s = get_object_or_404(Songs, id=request.POST.get('song.id'))
 	liked = False 
@@ -39,6 +48,21 @@ def LikeView(request, pk):
 		liked = True
 	return HttpResponseRedirect(reverse('music_profile', args=[str(pk)]))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Try to restrict the user go to index page whithout logged in...
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -46,14 +70,32 @@ def LikeView(request, pk):
 def AdminHomepage(request):
 
 	users  = User.objects.all()
+	paginator2 = Paginator(users, 4)
+	page_number2 = request.GET.get('page2')
+	page_obj2 = paginator2.get_page(page_number2)
+
 	comments = Sentiment_Records.objects.all()
+	paginator = Paginator(comments, 4)
+	page_number = request.GET.get('page')
+	page_obj = paginator.get_page(page_number)
+
 	groups = Group.objects.all()
 
 	total_users = users.count()
 	total_comments = comments.count()
 
-	context = {'users':users, 'comments':comments, 'groups':groups, 'total_users':total_users, 'total_comments':total_comments}
+	context = {'users':page_obj2, 'comments':page_obj, 'groups':groups, 'total_users':total_users, 'total_comments':total_comments}
 	return render(request, 'accounts/dashboard.html', context)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -82,10 +124,15 @@ def registerPage(request):
 
 
 
+
+
+
 # Logout the user...
 def logoutUser(request):
 	logout(request)
 	return redirect('login')
+
+
 
 
 
@@ -110,6 +157,8 @@ def loginPage(request):
 				
 		context = {}
 		return render(request, 'accounts/login.html', context)
+
+
 
 
 
@@ -145,7 +194,6 @@ def musicPage(request):
 			SongImage = x["album"]["images"][0]["url"]
 			songPreview = str(x["preview_url"])
 
-			
 			# check_duplicate = Songs.objects.values_list('songs_id')
 
 			# Save songs information to Django database from Spotify...
@@ -157,22 +205,37 @@ def musicPage(request):
 		return render(request, 'accounts/music.html', {'db_results':songs})
 
 	else:
+		# Queryset of all distinct artists...
+		cat = Songs.objects.values('artist_name').order_by('artist_name').distinct()
+
+		# Show the songs with upper then 70 popularity...
 		default_songs = Songs.objects.filter(popularity__gte=70)
 
+		# Pagination...
 		paginator = Paginator(default_songs, 6)
-
 		page = request.GET.get('page')
-
 		try:
 			songs = paginator.page(page)
-
 		except PageNotAnInteger:
 			songs = paginator.page(1)
-
 		except EmptyPage:
 			songs = paginator.page(paginator.num_pages)
 
-		return render(request, 'accounts/music.html', {'filter_results':songs})
+		return render(request, 'accounts/music.html', {'filter_results':songs, 'cat':cat})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url='login')
 def music_profilePage(request, song_id):
@@ -223,16 +286,22 @@ def music_profilePage(request, song_id):
 			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='orange'>NEUTRAL!</font></h1></center>")
 			
 		elif polarity > 0:
-			sentiment_result = "Postive"
+			sentiment_result = "Positive"
 			print(sentiment_result)
 
 			# Save the users comments with sentiment records to db...
 			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
 			store_comments_obj.save()
 			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='green'>POSITIVE!</font></h1></center>")
-			
-
+		
 	return render(request, 'accounts/music_profile.html', context)
+
+
+
+
+
+
+
 
 
 
@@ -240,16 +309,33 @@ def music_profilePage(request, song_id):
 
 @login_required(login_url='login')
 def RecommendationPage(request):
-	return render(request, 'accounts/recommendation.html')
+
+	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))
+
+	just_updated_song = Songs.objects.filter(release_date__icontains="2021")
+ 
+	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song}
+
+	return render(request, 'accounts/recommendation.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url='login')
 def recordsPage(request):
 
-	positive_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Postive") & Q(usr__exact=request.user)).count()
+	positive_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user)).count()
 	negative_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Negative") & Q(usr__exact=request.user)).count()
 	neutral_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Neutral") & Q(usr__exact=request.user)).count()
-
-	
 
 	specific_comments = Sentiment_Records.objects.filter(usr__exact=request.user)
 
@@ -259,24 +345,7 @@ def recordsPage(request):
 	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments, 'comment_filters':comment_filters}
 	return render(request, 'accounts/records.html', context)
 
-@login_required(login_url='login')
-def notificationPage(request):
-	return render(request, 'accounts/404.html')
 
-
-@login_required(login_url='login')
-def positivePage(request):
-	return render(request, 'accounts/positive.html')
-
-
-@login_required(login_url='login')
-def neutralPage(request):
-	return render(request, 'accounts/neutral.html')
-
-
-@login_required(login_url='login')
-def nagativePage(request):
-	return render(request, 'accounts/nagative.html')
 
 
 

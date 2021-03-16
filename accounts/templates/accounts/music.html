@@ -2,19 +2,27 @@
 {% block title %} Music {% endblock title %}
 {% load static %}
 {% block SearchBar %}
-   				<br><center><h3>Search the Artist here! </h3>
-          <h3>For 10 latest songs!</h3> 
-   					<form method="POST">
-   						{% csrf_token %} 
-  							<input name="artist" placeholder="Artist Name..." aria-label="Search">
-  								<i class="fas fa-search" aria-hidden="true"></i>
-					</form></center><br><hr>
+          <br><center><h3>Search the Artist here! For 10 latest songs!</h3> 
+            <form method="POST">
+              {% csrf_token %} 
+                <input name="artist" placeholder="Artist Name..." aria-label="Search">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+          </form></center><br>
+              {% if cat %}
+                    <div class="row">
+                      {% for x in cat %}
+                      <div class="col-sm-2">
+                          <h7><a href="#" >#{{x.artist_name}}</a></h7>
+                      </div>
+                      {% endfor %}
+                    </div>
+              {% endif %}
+              </div><hr>
 {% endblock SearchBar %}
 
 {% block content %}
 
       {% if db_results %}
-      db_results
       <div class="row">
           {% for x in db_results %}
           <div class="col-sm-4">
@@ -32,7 +40,6 @@
       {% endif %}
 
      {% if filter_results %}
-     filter_results
       <div class="row">
           {% for x in filter_results %}
           <div class="col-sm-4">
@@ -47,28 +54,23 @@
           </div>
           {% endfor %}
       </div>
-      <ul class = "pagination">
-
-        <li class ="page-item">
+      <center>
           {% if filter_results.has_previous %}
-            <a class ="page-link" href="?page={{filter_results.previous_page_number}}">Previous</a>
+              <a href="?page=1" class="btn btn-outline-info">&laquo; first</a>
+              <a href="?page={{ filter_results.previous_page_number }}" class="btn btn-outline-info">previous</a>
           {% endif %}
-        </li>
-
-        <li class = "page-item">
-          <a class ="page-link">Page {{filter_results.number}} of {{filter_results.paginator.num_pages}}</a>
-        </li>
-
-        <li class ="page-item">
+          <span class="current">
+              <a class="btn btn-secondary" disabled >Page {{ filter_results.number }} of {{ filter_results.paginator.num_pages }}</a>
+          </span>
           {% if filter_results.has_next %}
-            <a class ="page-link" href="?page={{filter_results.next_page_number}}">Next</a>
+              <a href="?page={{ filter_results.next_page_number }}" class="btn btn-outline-info">next</a>
+              <a href="?page={{ filter_results.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
           {% endif %}
-        </li>
-
-      </ul>
+    </center><br><br><br>
       {% endif %}
 
 {% endblock content %}
+
 
 
 
