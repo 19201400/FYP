@@ -7,17 +7,7 @@
               {% csrf_token %} 
                 <input name="artist" placeholder="Artist Name..." aria-label="Search" required>
                   <i class="fas fa-search" aria-hidden="true"></i>
-          </form></center><br>
-              {% if cat %}
-                    <div class="row">
-                      {% for x in cat %}
-                      <div class="col-sm-2">
-                          <h7><a href="#" >#{{x.artist_name}}</a></h7>
-                      </div>
-                      {% endfor %}
-                    </div>
-              {% endif %}
-              </div><hr>
+          </form></center><br><hr>
 {% endblock SearchBar %}
 
 {% block content %}
@@ -39,7 +29,11 @@
       </div>
       {% endif %}
 
+
      {% if filter_results %}
+      <div class="card-header">
+        <h4 class="card-title">High Popularity Songs</h4>
+      </div>
       <div class="row">
           {% for x in filter_results %}
           <div class="col-sm-4">
@@ -67,8 +61,32 @@
               <a href="?page={{ filter_results.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
           {% endif %}
     </center><br><br><br>
+            <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card-header">
+                    <h4 class="card-title">Recently Searched Artists</h4>
+                  </div>
+                  <div class="card-body">
+                    {% if cat %}
+                          <div class="row">
+                            {% for x in cat %}
+                            <div class="col-sm-2">
+                                <h7><a href="#" >#{{x.artist_name}}</a></h7>
+                            </div>
+                            {% endfor %}
+                          </div>
+                    {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       {% endif %}
-
 {% endblock content %}
 
 

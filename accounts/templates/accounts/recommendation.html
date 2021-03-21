@@ -72,7 +72,39 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card-header">
-					  	<h4 class="card-title">Positive Feeling</h4>
+					  	<h4 class="card-title">What songs the others feeling positive</h4>
+					</div>
+					<div class="card-body">
+					  		{% if others_liked_songs %}
+					  			<div class="row">
+					  				{% for x in others_liked_songs %}
+										<div class="col-sm-3">
+						            		<div class="box-element music">
+						              			<a href ="{% url 'music_profile' x.song.id %}"><img src="{{x.song.Song_image}}" width="250px", height="250px"></a>
+						              			<h3><strong>{{x.song.Song_name}}</strong></h3>
+						              			<h5>{{x.song.artist_name}}</h5>
+						            		</div>
+						            			<br>
+						          		</div>
+						          	{% endfor %}
+						          	{% else %}
+						          		There's no others songs...
+						      	</div>
+						    {% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<br>
+<br>
+<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card-header">
+					  	<h4 class="card-title">About Your Positive Feeling</h4>
 					</div>
 					<div class="card-body">
 					  		{% if positive_comm %}
@@ -86,8 +118,17 @@
 						            		</div>
 						            			<br>
 						          		</div>
-						          	{% endfor %}
+									{% endfor %}
+						          	{% else %}
+						      
+						              			<h3>You do not have any Submitted comments...</h3>
+						            		
+						            			<br>
+						          		</div>
+						          	
 						      	</div>
+						    
+
 						    {% endif %}
 					</div>
 				</div>

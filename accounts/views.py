@@ -169,6 +169,7 @@ def loginPage(request):
 @login_required(login_url='login')
 def musicPage(request):	
 	if request.method=='POST':
+
 		artist = request.POST.get('artist')
 
 		# Connecting to the Spotify Server...
@@ -181,8 +182,13 @@ def musicPage(request):
 		results = spotify.artist_top_tracks(artist_uri)
 		final_result=results['tracks'][:10]
 
+	
+
 		# Loop the tracks information from Spotify...
 		for x in final_result:
+
+			# Query of the song_id.
+			# Separate store the Spotify values
 			artistName = x['artists'][0]['name']
 			songName = x["name"]
 			albumName = x["album"]["name"]
@@ -194,11 +200,13 @@ def musicPage(request):
 			SongImage = x["album"]["images"][0]["url"]
 			songPreview = str(x["preview_url"])
 
-			# check_duplicate = Songs.objects.values_list('songs_id')
+			check_duplicate = Songs.objects.filter(Q(songs_id__exact=str(x["id"])))
 
-			# Save songs information to Django database from Spotify...
-			store_obj = Songs(artist_name = artistName, Song_name = songName, album_name = albumName, track_number = trackNumber, release_date = releaseDate, popularity = popularity, songs_id = songID, Song_image = SongImage, Song_preview = songPreview)
-			store_obj.save()	
+			if len(check_duplicate) == 0:
+
+				# Save songs information to Django database from Spotify...
+				store_obj = Songs(artist_name = artistName, Song_name = songName, album_name = albumName, track_number = trackNumber, release_date = releaseDate, popularity = popularity, songs_id = songID, Song_image = SongImage, Song_preview = songPreview)
+				store_obj.save()	
 
 		songs = Songs.objects.filter(Q(artist_name__contains=artist) | Q(Song_name__contains=artist) | Q(album_name__contains=artist))
 
@@ -310,13 +318,16 @@ def music_profilePage(request, song_id):
 @login_required(login_url='login')
 def RecommendationPage(request):
 
+	
 	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))[:8]
 
 	just_updated_song = Songs.objects.filter(Q(release_date__icontains="2021") | Q(release_date__icontains="2020"))[:8]
 
 	sounds_of_7080s = Songs.objects.filter(Q(release_date__icontains="197") | Q(release_date__icontains="198"))[:8]
+
+	others_liked_songs = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & ~Q(usr__exact=request.user))[:8]
  
-	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song, 'sounds_of_7080s':sounds_of_7080s}
+	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song, 'sounds_of_7080s':sounds_of_7080s, 'others_liked_songs':others_liked_songs}
 
 	return render(request, 'accounts/recommendation.html', context)
 
