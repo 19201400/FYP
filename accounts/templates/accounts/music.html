@@ -5,7 +5,7 @@
           <br><center><h3>Search the Artist here! For 10 latest songs!</h3> 
             <form method="POST">
               {% csrf_token %} 
-                <input name="artist" placeholder="Artist Name..." aria-label="Search" required>
+                <input name="artist" placeholder="Artist Name..." aria-label="Search" id="artistName" required>
                   <i class="fas fa-search" aria-hidden="true"></i>
           </form></center><br><hr>
 {% endblock SearchBar %}
@@ -74,7 +74,9 @@
                           <div class="row">
                             {% for x in cat %}
                             <div class="col-sm-2">
-                                <h7><a href="#" >#{{x.artist_name}}</a></h7>
+
+                                <h7><button type="submit" onclick="ik(this.value)" class="btn btn-link" value="{{x.artist_name}}">#{{x.artist_name}}</button></h7>
+    
                             </div>
                             {% endfor %}
                           </div>
@@ -87,6 +89,8 @@
           </div>
         </div>
       {% endif %}
+
+
 {% endblock content %}
 
 

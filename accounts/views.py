@@ -17,7 +17,7 @@ from django.db.models import Q
 
 from .decorators import unauthenticated_user, allowed_users, admin_only
 from .filters import commentsFilters
-
+from .forms import CreateUserForm
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -102,11 +102,11 @@ def AdminHomepage(request):
 
 @unauthenticated_user
 def registerPage(request):
-	form = UserCreationForm()
+	form = CreateUserForm()
 
 	# Check the user whether registered... If yes redirect to login page...
 	if request.method == 'POST':
-		form = UserCreationForm(request.POST)
+		form = CreateUserForm(request.POST)
 		if form.is_valid():
 			user = form.save()
 			username = form.cleaned_data.get('username')
@@ -220,7 +220,7 @@ def musicPage(request):
 		default_songs = Songs.objects.filter(popularity__gte=70)
 
 		# Pagination...
-		paginator = Paginator(default_songs, 6)
+		paginator = Paginator(default_songs, 12)
 		page = request.GET.get('page')
 		try:
 			songs = paginator.page(page)
