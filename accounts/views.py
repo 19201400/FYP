@@ -318,16 +318,45 @@ def music_profilePage(request, song_id):
 @login_required(login_url='login')
 def RecommendationPage(request):
 
-	
+	just_updated_song = Songs.objects.filter(Q(release_date__icontains="2021") | Q(release_date__icontains="2020"))
+	# Pagination...
+	paginator1 = Paginator(just_updated_song, 8)
+	page = request.GET.get('page')
+	try:
+		songs1 = paginator1.page(page)
+	except PageNotAnInteger:
+		songs1 = paginator1.page(1)
+	except EmptyPage:
+		songs1 = paginator1.page(paginator1.num_pages)
+
+
+
+	sounds_of_7080s = Songs.objects.filter(Q(release_date__icontains="197") | Q(release_date__icontains="198"))
+	# Pagination...
+	paginator2 = Paginator(sounds_of_7080s, 8)
+	page = request.GET.get('page2')
+	try:
+		songs2 = paginator2.page(page)
+	except PageNotAnInteger:
+		songs2 = paginator2.page(1)
+	except EmptyPage:
+		songs2 = paginator2.page(paginator2.num_pages)
+
+
+	others_liked_songs = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & ~Q(usr__exact=request.user))
+	# Pagination...
+	paginator3 = Paginator(others_liked_songs, 8)
+	page = request.GET.get('page3')
+	try:
+		songs3 = paginator3.page(page)
+	except PageNotAnInteger:
+		songs3 = paginator3.page(1)
+	except EmptyPage:
+		songs3 = paginator3.page(paginator3.num_pages)
+
 	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))[:8]
-
-	just_updated_song = Songs.objects.filter(Q(release_date__icontains="2021") | Q(release_date__icontains="2020"))[:8]
-
-	sounds_of_7080s = Songs.objects.filter(Q(release_date__icontains="197") | Q(release_date__icontains="198"))[:8]
-
-	others_liked_songs = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & ~Q(usr__exact=request.user))[:8]
  
-	context = {'positive_comm':positive_comm, 'just_updated_song':just_updated_song, 'sounds_of_7080s':sounds_of_7080s, 'others_liked_songs':others_liked_songs}
+	context = {'positive_comm':positive_comm, 'just_updated_song':songs1, 'sounds_of_7080s':songs2, 'others_liked_songs':songs3}
 
 	return render(request, 'accounts/recommendation.html', context)
 

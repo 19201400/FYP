@@ -13,7 +13,7 @@
 				<div class="col-md-12">
 					<div class="card-header">
 					  	<h4 class="card-title">New Music</h4>
-					</div>
+					</div> 
 					<div class="card-body">
 					  		{% if just_updated_song %}
 					  			<div class="row">
@@ -30,6 +30,19 @@
 						      	</div>
 						    {% endif %}
 					</div>
+					      <center>
+					          {% if just_updated_song.has_previous %}
+					              <a href="?page=1" class="btn btn-outline-info">&laquo; first</a>
+					              <a href="?page={{ just_updated_song.previous_page_number }}" class="btn btn-outline-info">previous</a>
+					          {% endif %}
+					          <span class="current">
+					              <a class="btn btn-secondary" disabled >Page {{ just_updated_song.number }} of {{ just_updated_song.paginator.num_pages }}</a>
+					          </span>
+					          {% if just_updated_song.has_next %}
+					              <a href="?page={{ just_updated_song.next_page_number }}" class="btn btn-outline-info">next</a>
+					              <a href="?page={{ just_updated_song.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
+					          {% endif %}
+    						</center>
 				</div>
 			</div>
 		</div>
@@ -60,6 +73,19 @@
 						      	</div>
 						    {% endif %}
 					</div>
+							<center>
+					          {% if sounds_of_7080s.has_previous %}
+					              <a href="?page2=1" class="btn btn-outline-info">&laquo; first</a>
+					              <a href="?page2={{ sounds_of_7080s.previous_page_number }}" class="btn btn-outline-info">previous</a>
+					          {% endif %}
+					          <span class="current">
+					              <a class="btn btn-secondary" disabled >Page {{ sounds_of_7080s.number }} of {{ sounds_of_7080s.paginator.num_pages }}</a>
+					          </span>
+					          {% if sounds_of_7080s.has_next %}
+					              <a href="?page2={{ sounds_of_7080s.next_page_number }}" class="btn btn-outline-info">next</a>
+					              <a href="?page2={{ sounds_of_7080s.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
+					          {% endif %}
+    						</center>
 				</div>
 			</div>
 		</div>
@@ -92,6 +118,19 @@
 						      	</div>
 						    {% endif %}
 					</div>
+							<center>
+					          {% if others_liked_songs.has_previous %}
+					              <a href="?page3=1" class="btn btn-outline-info">&laquo; first</a>
+					              <a href="?page3={{ others_liked_songs.previous_page_number }}" class="btn btn-outline-info">previous</a>
+					          {% endif %}
+					          <span class="current">
+					              <a class="btn btn-secondary" disabled >Page {{ others_liked_songs.number }} of {{ others_liked_songs.paginator.num_pages }}</a>
+					          </span>
+					          {% if others_liked_songs.has_next %}
+					              <a href="?page3={{ others_liked_songs.next_page_number }}" class="btn btn-outline-info">next</a>
+					              <a href="?page3={{ others_liked_songs.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
+					          {% endif %}
+    						</center>
 				</div>
 			</div>
 		</div>
