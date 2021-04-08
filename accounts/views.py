@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.urls import reverse 
+from django.views import generic
+
+from django.urls import reverse, reverse_lazy
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
@@ -362,16 +364,6 @@ def RecommendationPage(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
 @login_required(login_url='login')
 def recordsPage(request):
 
@@ -388,8 +380,14 @@ def recordsPage(request):
 	return render(request, 'accounts/records.html', context)
 
 
-
-
+@login_required(login_url='login')
+def deleteRecord(request, pk):
+	records = Sentiment_Records.objects.get(id=pk)
+	if request.method == "POST":
+		records.delete()
+		return redirect('records')
+	context = {'records':records}
+	return render(request, 'accounts/delete.html', context)
 
 
 

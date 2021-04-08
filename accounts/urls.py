@@ -24,4 +24,6 @@ urlpatterns = [
 
     path('records/', views.recordsPage, name = "records"),
 
+    path('delete_record/<str:pk>/', views.deleteRecord, name = "delete_record"),
+
 ]

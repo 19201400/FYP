@@ -70,6 +70,8 @@
 									<!-- <th>Sentiment Polarity: </th>
 									<th>Sentiment Subjectivity: </th> -->
 									<th>Create Date: (Date/Time) </th>
+									<th>Remove </th>
+
 									
 									
 								</tr>
@@ -83,6 +85,8 @@
 									<!-- <td>{{x.sentiment_polarity}}</td>
 									<td>{{x.sentiment_subjectivity}}</td> -->
 									<td>{{x.date_created}}</td>
+
+									<td><a class="btn btn-sm btn-danger" href="{% url 'delete_record' x.id %}">Delete</a></td>
 									
 								</tr>
 								{% endfor %}

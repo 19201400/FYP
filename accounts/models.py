@@ -30,4 +30,7 @@ class Sentiment_Records(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     usr = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     song = models.ForeignKey(Songs, null=True, on_delete=models.SET_NULL)
+
+    def __str__ (self):
+        return self.song_comments
  

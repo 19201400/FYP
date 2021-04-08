@@ -1,0 +1,21 @@
+{% extends 'accounts/main.html' %}
+{% block title %} Music {% endblock title %}
+{% load static %}
+
+{% block content %}
+<br>
+<br>
+
+<h3><p><b>Are you sure to delete this Sentiment Record?</b> <br> </h3>
+	<h5>Comments: "{{records}}"</p></h5>
+
+<form action="{% url 'delete_record' records.id %}" method="POST">
+	{% csrf_token %}
+	<button class="btn btn-info" ><a href="{% url 'records' %}"> Cencel</a></button>
+
+	<button class="btn btn-warning" type="submit" name="confirm">Submit</button>
+
+</form>
+
+
+{% endblock content %}
