@@ -125,3 +125,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/var/www/static/',
 ]
+
+
+# SMTP Configuration
+
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '19201400@life.hkbu.edu.hk'
+EMAIL_HOST_PASSWORD = 'Bc5191@1023'
