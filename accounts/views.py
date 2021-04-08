@@ -5,7 +5,8 @@ from django.views import generic
 
 from django.urls import reverse, reverse_lazy
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import *
@@ -19,7 +20,7 @@ from django.db.models import Q
 
 from .decorators import unauthenticated_user, allowed_users, admin_only
 from .filters import commentsFilters
-from .forms import CreateUserForm
+from .forms import CreateUserForm, EditProfileForm
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -29,9 +30,18 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
 
 
+class UserEditView(generic.UpdateView):
+	form_class = EditProfileForm
+	template_name = 'accounts/edit_profile.html'
+	success_url = reverse_lazy('music')
+
+	def get_object(self):
+		return self.request.user
 
 
-
+class PasswordsChangeView(PasswordChangeView):
+	from_class = PasswordChangeForm
+	success_url = reverse_lazy('music')
 
 
 
@@ -356,8 +366,8 @@ def RecommendationPage(request):
 	except EmptyPage:
 		songs3 = paginator3.page(paginator3.num_pages)
 
-	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))[:8]
- 
+	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))
+
 	context = {'positive_comm':positive_comm, 'just_updated_song':songs1, 'sounds_of_7080s':songs2, 'others_liked_songs':songs3}
 
 	return render(request, 'accounts/recommendation.html', context)
