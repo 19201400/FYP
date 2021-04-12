@@ -6,8 +6,9 @@
 <br>
 <br>
 
-<h3><p><b>Are you sure to delete this Sentiment Record?</b> <br> </h3>
-	<h5>Comments: "{{records}}"</p></h5>
+<h3><p><b>Are you sure you want to delete the sentiment records?</b> <br> </h3>
+	<h5>Comments: <u>"{{records}}"</u></h5><br>
+	<p><b>All of the following related items will be deleted:</b></p>
 
 <form action="{% url 'delete_record' records.id %}" method="POST">
 	{% csrf_token %}

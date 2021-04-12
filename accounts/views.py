@@ -5,6 +5,7 @@ from django.views import generic
 
 from django.urls import reverse, reverse_lazy
 
+
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
@@ -41,14 +42,16 @@ class UserEditView(generic.UpdateView):
 
 class PasswordsChangeView(PasswordChangeView):
 	from_class = PasswordChangeForm
-	success_url = reverse_lazy('music')
+	success_url = reverse_lazy('password_success')
+
+
+@login_required(login_url='login')
+def passwordSuccessPage(request):
+	return render(request, 'accounts/password_success.html')
 
 
 
-
-
-
-
+@login_required(login_url='login')
 def LikeView(request, pk):
 	s = get_object_or_404(Songs, id=request.POST.get('song.id'))
 	liked = False 
@@ -294,7 +297,7 @@ def music_profilePage(request, song_id):
 			# Save the users comments with sentiment records to db...
 			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
 			store_comments_obj.save()
-			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='red'>NEGATIVE!</font></h1></center>")
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='red'>NEGATIVE 😔!</font></h1></center>")
 			
 		elif polarity == 0:
 			sentiment_result = "Neutral"
@@ -303,7 +306,7 @@ def music_profilePage(request, song_id):
 			# Save the users comments with sentiment records to db...
 			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
 			store_comments_obj.save()
-			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='orange'>NEUTRAL!</font></h1></center>")
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='orange'>NEUTRAL 🙂!</font></h1></center>")
 			
 		elif polarity > 0:
 			sentiment_result = "Positive"
@@ -312,7 +315,7 @@ def music_profilePage(request, song_id):
 			# Save the users comments with sentiment records to db...
 			store_comments_obj = Sentiment_Records(song_comments = song_Comments, sentiment_result = sentiment_result, sentiment_polarity = polarity, sentiment_subjectivity = subjectivity, usr = request.user, song = song)
 			store_comments_obj.save()
-			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='green'>POSITIVE!</font></h1></center>")
+			return HttpResponse("<br><br><br><br><br><br><center><h1>Thanks for your feedback<br>Your Mood is <font color='green'>POSITIVE 😊!</font></h1></center>")
 		
 	return render(request, 'accounts/music_profile.html', context)
 
