@@ -98,7 +98,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card-header">
-					  	<h4 class="card-title">What songs the others feeling positive</h4>
+					  	<h4 class="card-title">What songs the others feeling Positive</h4>
 					</div>
 					<div class="card-body">
 					  		{% if others_liked_songs %}
@@ -137,7 +137,7 @@
 	</div>
 <br>
 <br>
-<br>
+<!-- <br>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="row">
@@ -169,6 +169,59 @@
 						    
 
 						    {% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<br> -->
+
+		<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card-header">
+					  	<h4 class="card-title">Your Liked Songs</h4>
+					</div>
+					<div class="card-body">
+					  		{% if user_liked_songs %}
+					  			<div class="row">
+					  				{% for x in user_liked_songs %}
+										<div class="col-sm-3">
+						            		<div class="box-element music">
+						              			<a href ="{% url 'music_profile' x.id %}"><img src="{{x.Song_image}}" width="250px", height="250px"></a>
+						              			<h3><strong>{{x.Song_name}}</strong></h3>
+						              			<h5>{{x.artist_name}}</h5>
+						            		</div>
+						            			<br>
+						          		</div>
+									{% endfor %}
+						          	{% else %}
+						      
+						              			<h3>You do not have any Liked Songs...</h3>
+						            		
+						            			<br>
+						          		</div>
+						          	
+						      	
+						    
+
+						    {% endif %}
+						    </div>
+						    <center>
+					          {% if user_liked_songs.has_previous %}
+					              <a href="?page4=1" class="btn btn-outline-info">&laquo; first</a>
+					              <a href="?page4={{ user_liked_songs.previous_page_number }}" class="btn btn-outline-info">previous</a>
+					          {% endif %}
+					          <span class="current">
+					              <a class="btn btn-secondary" disabled >Page {{ user_liked_songs.number }} of {{ user_liked_songs.paginator.num_pages }}</a>
+					          </span>
+					          {% if user_liked_songs.has_next %}
+					              <a href="?page4={{ user_liked_songs.next_page_number }}" class="btn btn-outline-info">next</a>
+					              <a href="?page4={{ user_liked_songs.paginator.num_pages }}" class="btn btn-outline-info">last &raquo;</a>
+					          {% endif %}
+    						</center>
 					</div>
 				</div>
 			</div>

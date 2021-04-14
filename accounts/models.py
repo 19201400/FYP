@@ -21,6 +21,8 @@ class Songs(models.Model):
     def total_likes(self):
         return self.likes.count()
 
+    
+
 
 class Sentiment_Records(models.Model):
     song_comments = models.TextField(max_length=500)

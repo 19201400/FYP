@@ -99,7 +99,16 @@ def AdminHomepage(request):
 	total_users = users.count()
 	total_comments = comments.count()
 
-	context = {'users':page_obj2, 'comments':page_obj, 'groups':groups, 'total_users':total_users, 'total_comments':total_comments}
+	total_po = Sentiment_Records.objects.filter(sentiment_result__exact="Positive").count()
+	po = round((total_po / total_comments) * 100,2)
+	total_neg = Sentiment_Records.objects.filter(sentiment_result__exact="Negative").count()
+	neg = round((total_neg / total_comments) * 100,2)
+	total_neu = Sentiment_Records.objects.filter(sentiment_result__exact="Neutral").count()
+	neu = round((total_neu / total_comments) * 100,2)
+
+
+
+	context = {'users':page_obj2, 'comments':page_obj, 'groups':groups, 'total_users':total_users, 'total_comments':total_comments, 'total_po':po, 'total_neg':neg, 'total_neu':neu}
 	return render(request, 'accounts/dashboard.html', context)
 
 
@@ -358,7 +367,10 @@ def RecommendationPage(request):
 		songs2 = paginator2.page(paginator2.num_pages)
 
 
-	others_liked_songs = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & ~Q(usr__exact=request.user))
+	a = Sentiment_Records.objects.filter(~Q(usr__exact=request.user))
+	others_liked_songs = a.filter(sentiment_result__exact="Positive")
+	
+	# others_liked_songs = Sentiment_Records.objects.filter(~Q(usr__exact=request.user) & Q(sentiment_result__exact="Positive"))
 	# Pagination...
 	paginator3 = Paginator(others_liked_songs, 8)
 	page = request.GET.get('page3')
@@ -369,9 +381,21 @@ def RecommendationPage(request):
 	except EmptyPage:
 		songs3 = paginator3.page(paginator3.num_pages)
 
-	positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))
+	# positive_comm = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Positive") & Q(usr__exact=request.user))
 
-	context = {'positive_comm':positive_comm, 'just_updated_song':songs1, 'sounds_of_7080s':songs2, 'others_liked_songs':songs3}
+	user_liked_songs = Songs.objects.filter(likes=request.user)
+	# Pagination...
+	paginator4 = Paginator(user_liked_songs, 8)
+	page = request.GET.get('page4')
+	try:
+		songs4 = paginator4.page(page)
+	except PageNotAnInteger:
+		songs4 = paginator4.page(1)
+	except EmptyPage:
+		songs4 = paginator4.page(paginator4.num_pages)
+
+
+	context = {'just_updated_song':songs1, 'sounds_of_7080s':songs2, 'others_liked_songs':songs3, 'user_liked_songs':songs4}
 
 	return render(request, 'accounts/recommendation.html', context)
 

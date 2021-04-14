@@ -12,7 +12,7 @@
 			  		<h4 class="card-title">Total Users</h4>
 			  	</div>
 			  	<div class="card-body">
-			    	<h1 class="card-title">{{total_users}}</h1>
+			    	<h1 class="card-title"><font color="blue">{{total_users}}</font></h1> <font color="grey">Users</font>
 			  	</div>
 			</div>
 		</div>
@@ -25,13 +25,57 @@
 			  		<h4 class="card-title">Total Submitted Comments</h4>
 			  	</div>
 			  	<div class="card-body">
-			    	<h1 class="card-title">{{total_comments}}</h1>
+			    	<h1 class="card-title"><font color="blue">{{total_comments}}</font></h1> <font color="grey">Comments</font>
 			  	</div>
 			</div>
 		</div>
 	</div>
 </div>
 
+<br>
+<br>
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="card text-center">
+						<div class="card-header">
+			  				<h4 class="card-title">Total Positive</h4>
+			  			</div>
+			  			<div class="card-body">
+			  				<h1 class="card-title"><font color="green">{{total_po}}%</font></h1><font color="grey">out of total {{total_comments}} comments</font>
+
+			  			</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card text-center">
+						<div class="card-header">
+			  				<h4 class="card-title">Total Negative</h4>
+			  			</div>
+			  			<div class="card-body">
+			  				<h1 class="card-title"><font color="red">{{total_neg}}%</font></h1> <font color="grey">out of total {{total_comments}} comments</font>
+			  				
+			  			</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card text-center">
+						<div class="card-header">
+			  				<h4 class="card-title">Total Neutral</h4>
+			  			</div>
+			  			<div class="card-body">
+			  				<h1 class="card-title"><font color="orange">{{total_neu}}%</font></h1> <font color="grey">out of total {{total_comments}} comments</font>
+			  				
+			  			</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <br>
 <br>
 <br>
@@ -113,7 +157,7 @@
 						<tr>
 							<!-- <td>{{ forloop.counter }}</td> -->
 							<td>{{comment.usr}}</td>
-							<td>{{comment.sentiment_result}}</td>
+							<td><b>{{comment.sentiment_result}}</b></td>
 							<td><a href ="{% url 'music_profile' comment.song.id %}">{{comment.song.Song_name}}</a></td>
 							<td>{{comment.song.artist_name}}</td>
 						</tr>
@@ -125,6 +169,10 @@
 		</div>
 	</div>
 </div>
+<br>
+<br>
+<br>
+
    {% endblock %}
 
 

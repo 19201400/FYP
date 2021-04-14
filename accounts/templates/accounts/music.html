@@ -2,7 +2,7 @@
 {% block title %} Music {% endblock title %}
 {% load static %}
 {% block SearchBar %}
-          <br><center><h3>Search the Artist here! For 10 latest songs!</h3> 
+          <br><center><h3>Search the Artist (For 10 latest songs!) & Song Name here! </h3> 
             <form method="POST">
               {% csrf_token %} 
                 <input name="artist" placeholder="Artist Name..." aria-label="Search" id="artistName" required>
@@ -17,7 +17,7 @@
           {% for x in db_results %}
           <div class="col-sm-4">
             <div class="box-element music">
-              <img src="{{x.Song_image}}" width="250px", height="250px"><hr>
+              <a href ="{% url 'music_profile' x.id %}"><img src="{{x.Song_image}}" width="250px", height="250px"></a><hr>
               <h3><strong>{{x.Song_name}}</strong></h3>
               <h5>{{x.artist_name}}</h5>
               <a href="{{x.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></a>
@@ -38,7 +38,7 @@
           {% for x in filter_results %}
           <div class="col-sm-4">
             <div class="box-element music">
-              <img src="{{x.Song_image}}" width="250px", height="250px"><hr>
+              <a href ="{% url 'music_profile' x.id %}"><img src="{{x.Song_image}}" width="250px", height="250px"></a><hr>
               <h3><strong>{{x.Song_name}}</strong></h3>
               <h5>{{x.artist_name}}</h5>
               <a href="{{x.Song_preview}}"><button type="button" class="btn btn-outline-warning">PLAY SONG</button></a>
@@ -67,15 +67,15 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="card-header">
-                    <h4 class="card-title">Recently Searched Artists</h4>
+                    <h4 class="card-title">Recently Searched Artists<button onclick="myFunction()" class="btn btn-outline-secondary float-end">Hide & Show more </button></h4> 
                   </div>
                   <div class="card-body">
                     {% if cat %}
                           <div class="row">
                             {% for x in cat %}
-                            <div class="col-sm-2">
+                            <div  class="col-sm-2">
 
-                                <h7><button type="submit" onclick="ik(this.value)" class="btn btn-link" value="{{x.artist_name}}">#{{x.artist_name}}</button></h7>
+                                <h7><button id="myDIV" type="submit" onclick="ik(this.value)" class="btn btn-link" value="{{x.artist_name}}">#{{x.artist_name}}</button></h7>
     
                             </div>
                             {% endfor %}
@@ -93,25 +93,6 @@
 
 {% endblock content %}
 
-
-
-
-<!--     {% if results %}
-    <div class="container">
-    	<div class="row">
-    	{% for x in results %}
-    	
-    		<div class="col">
-    			<ol class="list-group mt-1">
-      				<li class="list-group-item bg-info text-center"><h3 class="text-white" >{{x.name}}</h3></li>
-     				<li class="list-group-item" ><a href='{{x.preview_url}}'><button type="button" class="btn btn-success btn-lg mt-1">PLAY SONG</button></a></li>
-      				<li class="list-group-item"><img src="{{x.album.images.0.url}}" class="img-fluid img-thumbnail" alt=""></li>
-    			</ol>
-			</div><hr>
-    	{% endfor %}
-    	</div>
-    </div>
-    {% endif %} -->
 
 
  
