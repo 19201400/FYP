@@ -67,15 +67,15 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="card-header">
-                    <h4 class="card-title">Recently Searched Artists<button onclick="myFunction()" class="btn btn-outline-secondary float-end">Hide & Show more </button></h4> 
+                    <h4 class="card-title">Recently Searched Artists</h4> 
                   </div>
                   <div class="card-body">
                     {% if cat %}
                           <div class="row">
                             {% for x in cat %}
-                            <div  class="col-sm-2">
+                            <div class="col-sm-2">
 
-                                <h7><button id="myDIV" type="submit" onclick="ik(this.value)" class="btn btn-link" value="{{x.artist_name}}">#{{x.artist_name}}</button></h7>
+                                <h7><button  type="submit" onclick="ik(this.value)" class="btn btn-link" value="{{x.artist_name}}">#{{x.artist_name}}</button></h7>
     
                             </div>
                             {% endfor %}

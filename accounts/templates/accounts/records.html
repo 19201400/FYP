@@ -1,6 +1,6 @@
 {% extends 'accounts/main.html' %}
 {% block title %} Records {% endblock title %}
-
+ 
    {% block content %}
 					<br>
 					<br>
@@ -13,7 +13,7 @@
 					  		<h4 class="card-title">Total Positive Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title"><font color="green">{{positive_count}}</font></h1>
+					    	<h1 class="card-title"><font color="green">{{positive_count}}</font></h1><font color="grey">out of total {{total_sentiment_result}} comments</font>
 					  	</div>
 					</div>
 				</div>
@@ -23,7 +23,7 @@
 					  		<h4 class="card-title">Total Negative Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title"><font color="red">{{negative_count}}</font></h1>
+					    	<h1 class="card-title"><font color="red">{{negative_count}}</font></h1><font color="grey">out of total {{total_sentiment_result}} comments</font>
 					  	</div>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 					  		<h4 class="card-title">Total Neutral Comments</h4>
 					  	</div>
 					  	<div class="card-body">
-					    	<h1 class="card-title"><font color="orange">{{neutral_count}}</font></h1>
+					    	<h1 class="card-title"><font color="orange">{{neutral_count}}</font></h1><font color="grey">out of total {{total_sentiment_result}} comments</font>
 					  	</div>
 					</div>
 				</div>

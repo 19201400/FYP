@@ -408,12 +408,14 @@ def recordsPage(request):
 	negative_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Negative") & Q(usr__exact=request.user)).count()
 	neutral_count = Sentiment_Records.objects.filter(Q(sentiment_result__exact="Neutral") & Q(usr__exact=request.user)).count()
 
+	total_sentiment_result = Sentiment_Records.objects.filter(usr__exact=request.user).count()
+
 	specific_comments = Sentiment_Records.objects.filter(usr__exact=request.user)
 
 	comment_filters = commentsFilters(request.GET, queryset=specific_comments)
 	specific_comments = comment_filters.qs
 
-	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments, 'comment_filters':comment_filters}
+	context = {'positive_count':positive_count, 'negative_count':negative_count, 'neutral_count':neutral_count , 'specific_comments':specific_comments, 'comment_filters':comment_filters, 'total_sentiment_result':total_sentiment_result}
 	return render(request, 'accounts/records.html', context)
 
 
